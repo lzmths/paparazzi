@@ -1,4 +1,7 @@
-language: c
+sudo: required
+dist: trusty
+# use minimal image:
+language: generic
 compiler:
   - gcc
   - clang
@@ -10,6 +13,22 @@ install:
   - sudo apt-get install paparazzi-dev paparazzi-jsbsim gcc-arm-none-eabi libipc-run-perl
 script:
   - make test
+
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "QGE7s/sTIX3F4hG8YYbpYjB2x0YsUUo9qHf+Dv5BqNcTtZ2TLO0tHPWxoI5wlRLiMEOOnINNwYk7ooM3oOXa0Fm9urja9k78cFutbbDtvGD6DjUFajwJ0KnwXnLulCgG+l67umGitSazQpyEQE4pvX/8EnB9/pgq706DlmCbkds="
+
+addons:
+  coverity_scan:
+    project:
+      name: "paparazzi/paparazzi"
+      description: "Build submitted via Travis CI"
+    notification_email: paparazzi-builds@nongnu.org
+    build_command_prepend: "make ext"
+    build_command: "make"
+    branch_pattern: coverity_scan
 
 notifications:
   webhooks:
